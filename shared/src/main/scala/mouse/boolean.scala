@@ -1,6 +1,7 @@
 package mouse
 
 import cats.{ Applicative, Monoid }
+import alleycats.Empty
 
 trait BooleanSyntax {
   implicit final def booleanSyntaxMouse(b: Boolean): BooleanOps = new BooleanOps(b)
@@ -24,6 +25,10 @@ final class BooleanOps(val b: Boolean) extends AnyVal {
   @inline def ??[A](a: => A)(implicit M: Monoid[A]): A = valueOrZero(a)
 
   @inline def !?[A](a: => A)(implicit M: Monoid[A]): A = zeroOrValue(a)
+
+  @inline def valueOrEmpty[A](a: => A)(implicit E: Empty[A]): A = if (b) a else E.empty
+
+  @inline def emptyOrValue[A](a: => A)(implicit E: Empty[A]): A = if (b) E.empty else a
 
   @inline def valueOrPure[F[_], A](fa: =>F[A])(a: =>A)(implicit F: Applicative[F]) = if (b) fa else F.pure(a)
 }

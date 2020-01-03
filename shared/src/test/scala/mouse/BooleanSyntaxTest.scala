@@ -1,6 +1,7 @@
 package mouse
 
 import cats.syntax.either._
+import alleycats.Empty._
 
 class BooleanSyntaxTest extends MouseSuite {
 
@@ -31,6 +32,16 @@ class BooleanSyntaxTest extends MouseSuite {
   true.??("Yellow") shouldEqual "Yellow"
 
   true.!?("Yellow") shouldEqual ""
+
+  implicit val e: Empty[
+
+  true.valueOrEmpty(Option('a')) shouldEqual Some('a')
+
+  false.valueOrEmpty(Option('a')) shouldEqual None
+
+  true.emptyOrValue(Option('a')) shouldEqual Some('a')
+
+  false.emptyOrValue(Option('a')) shouldEqual None
 
   true.valueOrPure(Option(1))(2) shouldEqual Some(1)
 
